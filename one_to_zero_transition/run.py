@@ -36,6 +36,8 @@ def response(t, VREF, VREG, tau, response_time):
 
         return 3.3 * (np.e)**(-(t - response_time)/tau)
 
+error = 0
+
 for sim in fixture_sims.keys():
     time = fixture_sims[sim]['rp'][0]
     vreg = fixture_sims[sim]['inp'][1][0]
@@ -46,14 +48,21 @@ for sim in fixture_sims.keys():
     print(vref)
     print(vreg)
     print(tau)
-    print(response_time)
 
     vec_response = np.vectorize(response)
+    response_vec = vec_response(time, vref, vreg, tau, response_time )
+    print(response)
 
-    plt.plot(fixture_sims[sim]['rp'][0],fixture_sims[sim]['rp'][1], label='experimental')
-    plt.plot(time, vec_response(time, vref, vreg, tau, response_time ), label='model')
-    plt.legend(loc='best')
-    plt.show()
+    ploterror = np.sum((fixture_sims[sim]['rp'][1] - response_vec)**2,0)
+    error = error + ploterror
+    
+    print("error in plot: {}".format(ploterror))
 
+    if(False):
+        plt.plot(fixture_sims[sim]['rp'][0],fixture_sims[sim]['rp'][1], label='experimental')
+        plt.plot(time, response_vec, label='model')
+        plt.legend(loc='best')
+        plt.show()
 
+print("Average Error: {}".format(error / len(fixture_sims.keys())))
 
