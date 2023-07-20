@@ -29,12 +29,14 @@ print(paramdict_tau)
 paramdict_response_time = dict(map(lambda p:(p[0],p[1]['const_1']), params['response_time'].items()))
 print(paramdict_response_time)
 
-def response(t, VREF, VREG, tau, response_time):
+def response(t, tau, response_time):
     if(t < response_time):
-        return 3.3
+        return 0.0
     else:
-
-        return 3.3 * (np.e)**(-(t - response_time)/tau)
+        print(t)
+        result = 3.3 * ( 1 - (np.e)**(-(t - response_time)/tau) )
+        print(result)
+        return result
 
 error = 0
 
@@ -50,15 +52,16 @@ for sim in fixture_sims.keys():
     print(tau)
 
     vec_response = np.vectorize(response)
-    response_vec = vec_response(time, vref, vreg, tau, response_time )
-    print(response)
-
+    response_vec = vec_response(time, tau, response_time )
+    print(response_vec)
+    print(time)
+    
     ploterror = np.sum((fixture_sims[sim]['rp'][1] - response_vec)**2,0)
     error = error + ploterror
     
     print("error in plot: {}".format(ploterror))
 
-    if(True):
+    if(False):
         plt.plot(fixture_sims[sim]['rp'][0],fixture_sims[sim]['rp'][1], label='experimental')
         plt.plot(time, response_vec, label='model')
         plt.legend(loc='best')
