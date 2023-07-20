@@ -1,0 +1,14 @@
+response_time:
+  VREF_to_response_time:
+    const_1: -3.49606859284375e-12
+  VREG_to_response_time:
+    const_1: -8.475751810966052e-12
+  const_response_time:
+    const_1: 3.5300072988995465e-10
+tau:
+  VREF_to_tau:
+    const_1: 6.53793697384406e-11
+  VREG_to_tau:
+    const_1: -1.5937726927558925e-10
+  const_tau:
+    const_1: 4.4102076972919214e-10
